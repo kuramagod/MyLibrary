@@ -16,6 +16,8 @@ def read_items(
     session: SessionDep,
     genre: Annotated[str | None, Query(min_length=3)] = None,
     release_year: Annotated[int | None, Query(ge=0, le=datetime.today().year)] = None,
+    page: Annotated[int, Query(ge=1)] = 1,
+    size: Annotated[int, Query(le=100)] = 100,
     title:  Annotated[str | None, Query(max_length=255)] = None) -> Item:
     query = select(Item)
     
@@ -31,7 +33,8 @@ def read_items(
     if title:
         query = query.where(Item.title.ilike(f"%{title}%"))
     
-    return session.exec(query).all()
+    query = query.order_by(Item.id)
+    return session.exec(query.offset((page - 1) * size).limit(size)).all()
 
 
 @router.get("/{item_id}", response_model=ItemPublic)
