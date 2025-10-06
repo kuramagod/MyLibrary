@@ -2,8 +2,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlmodel import select
 from sqlalchemy.exc import IntegrityError
-from app.models import User, Review, ReviewCreate, ReviewPublic, ReviewUpdate
-from app.dependencies import get_current_user, SessionDep
+from models import User, Review, ReviewCreate, ReviewPublic, ReviewUpdate
+from dependencies import get_current_user, SessionDep
 
 
 router = APIRouter(prefix="/reviews")

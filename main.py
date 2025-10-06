@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from app.routers import items, users, genres, reviews
-from app.database import create_db_and_tables
+from routers import items, users, genres, reviews
+from database import create_db_and_tables
 
 
 app = FastAPI()

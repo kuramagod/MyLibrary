@@ -2,8 +2,8 @@ from typing import Annotated
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlmodel import select
 from sqlalchemy.exc import IntegrityError
-from app.models import Genre, GenrePublic, GenreCreate, User
-from app.dependencies import SessionDep, is_admin
+from models import Genre, GenrePublic, GenreCreate, User
+from dependencies import SessionDep, is_admin
 
 
 router = APIRouter(prefix="/genres")
