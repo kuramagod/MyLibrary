@@ -1,0 +1,16 @@
+echo "__pycache__/
+*.pyc
+*.pyo
+*.db
+.env
+.venv/
+.idea/
+.vscode/
+__pycache__/
+*.sqlite3
+*.log
+media/
+staticfiles/
+" > .gitignore
+.alembic/
+.app/
