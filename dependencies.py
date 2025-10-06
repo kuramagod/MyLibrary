@@ -7,8 +7,8 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import select, Session
 from jwt import InvalidTokenError
 from passlib.context import CryptContext
-from app.database import get_session
-from app.models import User, TokenData
+from database import get_session
+from models import User, TokenData
 
 
 SECRET_KEY = "5b5024a5beff8520a109b66d13a53b1daed26b5a2e9f92bbaa0a29e6f84fb548"

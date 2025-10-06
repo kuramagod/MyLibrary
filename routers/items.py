@@ -4,8 +4,8 @@ from datetime import datetime
 from fastapi import APIRouter, HTTPException, status, Query, Depends
 from sqlmodel import select
 from sqlalchemy.exc import IntegrityError
-from app.models import ItemPublic, Item, ItemCreate, ItemUpdate, Genre, User, Review
-from app.dependencies import SessionDep, is_admin
+from models import ItemPublic, Item, ItemCreate, ItemUpdate, Genre, User, Review
+from dependencies import SessionDep, is_admin
 
 
 router = APIRouter(prefix="/items", tags=["items"])

@@ -3,8 +3,8 @@ from typing import Annotated
 from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from app.models import UserPublic, UserCreate, Token, User
-from app.dependencies import SessionDep, pwd_context, User, authenticate_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, get_current_user
+from models import UserPublic, UserCreate, Token, User
+from dependencies import SessionDep, pwd_context, User, authenticate_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, get_current_user
 
 
 router = APIRouter(prefix="/users", tags=["users"])
