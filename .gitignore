@@ -12,5 +12,6 @@ __pycache__/
 media/
 staticfiles/
 " > .gitignore
-.alembic/
+alembic/
 .app/
+*.ini

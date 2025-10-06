@@ -1,4 +1,4 @@
-from sqlmodel import SQLModel, Field, Column, String, Relationship
+from sqlmodel import SQLModel, Field, Column, String, Relationship, DateTime, func, Integer
 from pydantic import EmailStr
 from datetime import datetime, timezone
 
@@ -14,22 +14,21 @@ class TokenData(SQLModel):
 
 class UserRole(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    name: str
+    name: str = Field(sa_column=Column(String(50), unique=True))
+    users: list["User"] = Relationship(back_populates="role")
 
 
 class UserBase(SQLModel):
-    username: str
-    email: EmailStr 
+    username: str = Field(sa_column=Column(String(25), unique=True, nullable=False))
+    email: str = Field(sa_column=Column(String(100), unique=True, nullable=False))
 
 
 class User(UserBase,  table=True):
     id: int | None = Field(default=None, primary_key=True)
-    username: str = Field(sa_column=Column(String(25), unique=True))
-    email: str = Field(sa_column=Column(String, unique=True))
-    hashed_password: str = Field()
-    created_at: datetime = Field(default_factory=datetime.now)
+    hashed_password: str = Field(sa_column=Column(String(128), nullable=False))
+    created_at: datetime = Field(default_factory=datetime.now, sa_column=Column(DateTime, nullable=False))
     role_id: int = Field(default=1, foreign_key="userrole.id")
-    role: UserRole | None = Relationship()
+    role: UserRole | None = Relationship(back_populates="users")
 
 
 class UserPublic(UserBase):
@@ -38,7 +37,9 @@ class UserPublic(UserBase):
 
 
 class UserCreate(UserBase):
-    password: str
+    username: str = Field(max_length=25, regex=r"^\S+$", description="Username cannot contain spaces")
+    email: str = Field(max_length=100)
+    password: str = Field(max_length=128)
 
 
 class UserUpdate(SQLModel):
@@ -52,7 +53,7 @@ class UserUpdate(SQLModel):
 
 
 class GenreBase(SQLModel):
-    name: str
+    name: str = Field(sa_column=Column(String(50), unique=True, nullable=False))
 
 
 class Genre(GenreBase, table=True):
