@@ -40,6 +40,7 @@ def read_items(
 @router.get("/{item_id}", response_model=ItemPublic)
 def read_item(item_id: int, session: SessionDep) -> Item:
     item = session.get(Item, item_id)
+    
     if not item:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     
@@ -58,6 +59,7 @@ def create_item(
     ) -> Item:
     db_item = Item.model_validate(item)
     session.add(db_item)
+    
     try: 
         session.commit()
     except IntegrityError:
@@ -65,6 +67,7 @@ def create_item(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid data (duplicate or foreign key error)")
+    
     session.refresh(db_item)
     return db_item
 
@@ -77,8 +80,10 @@ def update_item(
     session: SessionDep
     ) -> Item:
     item_db = session.get(Item, item_id)
+    
     if not item_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    
     item_data = item.model_dump(exclude_unset=True)
     item_db.sqlmodel_update(item_data)
     session.add(item_db)
@@ -94,8 +99,10 @@ def delete_item(
     session: SessionDep
     ) -> dict:
     item = session.get(Item, item_id)
+    
     if not item:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    
     session.delete(item)
     session.commit()
     return {"OK": True}

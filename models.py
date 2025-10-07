@@ -1,4 +1,4 @@
-from sqlmodel import SQLModel, Field, Column, String, Relationship, DateTime, func, Integer
+from sqlmodel import SQLModel, Field, Column, String, Relationship, DateTime, func
 from pydantic import EmailStr
 from datetime import datetime, timezone
 
@@ -34,6 +34,7 @@ class User(UserBase,  table=True):
 class UserPublic(UserBase):
     id: int
     created_at: datetime
+    role: UserRole
 
 
 class UserCreate(UserBase):
@@ -58,11 +59,11 @@ class GenreBase(SQLModel):
 
 class Genre(GenreBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    name: str = Field(unique=True)
+    items: list["Item"] = Relationship(back_populates="genre")
 
 
 class GenreCreate(GenreBase):
-    pass
+    name: str = Field(max_length=50)
 
 
 class GenrePublic(GenreBase):
@@ -70,35 +71,36 @@ class GenrePublic(GenreBase):
 
 
 class ItemBase(SQLModel):
-    title: str
-    description: str
-    release_year: int
-    genre_id: int
+    title: str = Field(sa_column=Column(String(50), nullable=False))
+    description: str = Field(sa_column=String(250))
+    release_year: int = Field(ge=0, le=datetime.today().year)
 
 
 class Item(ItemBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    title: str = Field()
-    description: str = Field()
-    release_year: int = Field(ge=0, le=datetime.today().year)
-    genre_id: int = Field(foreign_key="genre.id")
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    genre_id: int = Field(foreign_key="genre.id")
+    genre: Genre | None = Relationship(back_populates="items")
 
 
 class ItemCreate(ItemBase):
+    title: str = Field(max_length=50)
+    description: str = Field(max_length=250)
     release_year: int = Field(ge=0, le=datetime.today().year)
+    genre_id: int
 
 
 class ItemPublic(ItemBase):
     id: int
     created_at: datetime
+    genre: Genre
     avg_rating: float | None = None
 
 
-class ItemUpdate(SQLModel):
-    title: str | None = None
-    description: str | None = None
-    release_year: int | None = None
+class ItemUpdate(ItemBase):
+    title: str | None = Field(default=None, max_length=50)
+    description: str | None = Field(default=None, max_length=250)
+    release_year: int | None = Field(default=None, ge=0, le=datetime.today().year)
     genre_id: int | None = None
 
     model_config = {
@@ -107,31 +109,28 @@ class ItemUpdate(SQLModel):
 
 
 class ReviewBase(SQLModel):
-    item_id: int
-    rating: int
-    comment: str
+    item_id: int = Field(foreign_key="item.id")
+    rating: int = Field(ge=1, le=10)
+    comment: str = Field(String(250))
 
 
 class Review(ReviewBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     user_id: int = Field(foreign_key="user.id")
-    item_id: int = Field(foreign_key="item.id")
-    rating: int = Field(ge=1, le=10)
-    comment: str = Field()
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class ReviewCreate(ReviewBase):
-    pass
+    comment: str = Field(max_length=250)
 
 
 class ReviewPublic(ReviewBase):
     user_id: int
 
 
-class ReviewUpdate(SQLModel):
-    rating: int | None = None
-    comment: str | None = None
+class ReviewUpdate(ReviewBase):
+    rating: int | None = Field(default=None, ge=1, le=10)
+    comment: str | None = Field(default=None, max_length=250)
 
     model_config = {
         "extra": "forbid"

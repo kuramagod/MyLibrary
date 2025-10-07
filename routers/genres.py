@@ -6,7 +6,7 @@ from models import Genre, GenrePublic, GenreCreate, User
 from dependencies import SessionDep, is_admin
 
 
-router = APIRouter(prefix="/genres")
+router = APIRouter(prefix="/genres", tags=["genres"])
 
 
 # Жанры
@@ -14,6 +14,7 @@ router = APIRouter(prefix="/genres")
 def read_genres(session: SessionDep) -> Genre:
     genres = session.exec(select(Genre)).all()
     return genres
+
 
 @router.post("/", response_model=Genre)
 def create_genre(
@@ -23,6 +24,7 @@ def create_genre(
     ) -> Genre:
     db_genre = Genre.model_validate(genre)
     session.add(db_genre)
+    
     try:
         session.commit()
     except IntegrityError:
@@ -30,5 +32,6 @@ def create_genre(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Genre already exists")
+    
     session.refresh(db_genre)
     return db_genre
