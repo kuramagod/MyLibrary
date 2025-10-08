@@ -88,6 +88,14 @@ ReDoc — [/redoc](http://127.0.0.1:8000/redoc)
 
 ---
 
+## 🖼 Скриншоты /docs
+
+![1](screenshots/screen1.png)
+
+![2](screenshots/screen2.png)
+
+---
+
 ## ⚙️ Структура проекта
 
 ```bash
