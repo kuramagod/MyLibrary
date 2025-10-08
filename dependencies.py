@@ -9,7 +9,7 @@ from jwt import InvalidTokenError
 from passlib.context import CryptContext
 from database import get_session
 from models import User, TokenData
-from config import SECRET_KEY, ALGORITHM
+from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 SessionDep = Annotated[Session, Depends(get_session)]
