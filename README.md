@@ -89,11 +89,44 @@ ReDoc — [/redoc](http://127.0.0.1:8000/redoc)
 
 ---
 
-## 🖼 Скриншоты /docs
+## 🧭 API маршруты
 
-![1](screenshots/screen1.png)
+Ниже приведён полный перечень доступных маршрутов проекта.
 
-![2](screenshots/screen2.png)
+### Пользователи
+
+| Метод | Путь | Описание | Доступ |
+| --- | --- | --- | --- |
+| POST | /users/register/ | Регистрация нового пользователя | Public |
+| POST | /users/login/ | Получение JWT-токена | Public |
+| GET | /users/me/ | Информация о текущем пользователе | Auth |
+
+### Медиа-объекты
+
+| Метод | Путь | Описание | Доступ |
+| --- | --- | --- | --- |
+| GET | /items/ | Список объектов с фильтрами и пагинацией | Public |
+| GET | /items/{item_id} | Получение объекта по ID | Public |
+| POST | /items/ | Создание нового объекта | Admin |
+| PATCH | /items/{item_id} | Обновление объекта | Admin |
+| DELETE | /items/{item_id} | Удаление объекта | Admin |
+
+### Отзывы
+
+| Метод | Путь | Описание | Доступ |
+| --- | --- | --- | --- |
+| POST | /reviews/ | Создание отзыва | Auth |
+| GET | /reviews/reviews/item/{item_id} | Список отзывов к объекту | Public |
+| GET | /reviews/reviews/user/{user_id} | Список отзывов пользователя | Public |
+| PATCH | /reviews/review/{review_id}/ | Обновление отзыва | Owner |
+| DELETE | /reviews/review/{review_id}/ | Удаление отзыва | Owner |
+
+### Жанры
+
+| Метод | Путь | Описание | Доступ |
+| --- | --- | --- | --- |
+| GET | /genres/ | Список жанров | Public |
+| POST | /genres/ | Создание жанра | Admin |
 
 ---
 
