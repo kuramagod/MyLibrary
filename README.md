@@ -61,8 +61,8 @@
 
 ```bash
 # Клонировать репозиторий
-git clone https://github.com/kuramagod/MyLibrary.git
-cd MyLibrary
+git clone https://github.com/kuramagod/mylibrary-api.git
+cd mylibrary-api
 
 # Создать и активировать виртуальное окружение
 python -m venv venv
